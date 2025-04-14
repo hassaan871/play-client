@@ -1,21 +1,8 @@
-import HomePage from "./pages/components/HomePage";
-import LoginPage from "./pages/components/LoginPage";
-import SignupPage from "./pages/components/SignupPage";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/router";
 
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-
-function App() {
-
-  return (
-    // BrowserRouter as Router
-    <Router>
-      <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />}/>
-          <Route path="/home" element={<HomePage/>}/>
-      </Routes>
-    </Router>
-  )
+const App = () => {
+  return <RouterProvider router={router} />
 }
 
-export default App
+export default App;

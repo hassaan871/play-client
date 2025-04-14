@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import axios from "axios";
+import "../styles/SignupPage.css";
 
 const SignupPage = () => {
     const [username, setUsername] = useState("");
@@ -14,15 +15,15 @@ const SignupPage = () => {
         try {
             // const API_URL = "http://20.244.2.32:5000/api/v1/user/signup";
             const API_URL = "http://localhost:5000/api/v1/user/signup";
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, email, fullName, password })
+            
+            const response = await axios.post(API_URL, {
+                username,
+                email,
+                fullName,
+                password
             });
+            const data = response.data;
 
-            const data = await response.json();
             if(data.success){
                 setMessage(data.message);
             }else{
@@ -30,15 +31,19 @@ const SignupPage = () => {
             }
         } catch (error) {
             console.error(error);
-            setMessage("An error occured: "+error.message);
+            if(error.response && error.response.status === 400) {
+                setMessage("User already exists : "+ error.response.message);
+            } else {
+                setMessage("An error occured: "+error.message);
+            }
         }
-    }
+    };
 
     return(
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h1>Sign up</h1>
-                <div>
+        <div className="signup-container">
+            <form className="signup-form" onSubmit={handleSubmit}>
+                <h1 className="signup-title">Sign up</h1>
+                <div className="form-group">
                     <label htmlFor="username">Username: </label>
                     <input 
                     type="text"
@@ -49,7 +54,7 @@ const SignupPage = () => {
                     required
                      />
                 </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="email">Email: </label>
                     <input 
                     type="email"
@@ -60,7 +65,7 @@ const SignupPage = () => {
                     required
                      />
                 </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="fullname">Full Name: </label>
                     <input 
                     type="text"
@@ -71,7 +76,7 @@ const SignupPage = () => {
                     required
                      />
                 </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="password">Password: </label>
                     <input 
                     type="text"
@@ -82,7 +87,7 @@ const SignupPage = () => {
                     required
                      />
                 </div>
-                <button type="submit">Sign up</button>
+                <button className="signup-button" type="submit">Sign up</button>
             </form>
             {message && <p>{message}</p>}
         </div>
